@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vuex</title>
+  <script src="../../node_modules/vue/dist/vue.js"></script>
+  <script src="../../node_modules/vuex/dist/vuex.min.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h2>{{msg}}</h2>
+    <counter></counter>
+  </div>
+
+
+
+<script>
+  const counter = {
+    template:`
+      <div>{{count}}</div>
+    `,
+    computed:{
+      count(){
+        return this.$store.state.count
+      }
+    }
+  }
+  const store = new Vuex.Store({
+    //在vuex里面定义一个状态，这个状态在任何一个页面，任何一个组件都可以使用，前提是把vuex插件store在new vue中注册进来，只要注册进来，
+    //所有的页面和组件都可以用到
+    state:{
+      //
+      count:10
+    }
+  })
+  new Vue({
+    //监听app
+    el:"#app",
+    //key和value一样的时候，可以省略value，它的意思其实就是store ：store
+    store,
+    data:{
+      msg:"Vuex的使用"
+    },
+    components:{
+      //注册进去以后，它就具备了vuex的功能
+      counter
+    }
+  })
+</script>
+</body>
+</html>
+<script>
+  import Counter from "../../src/components/Counter";
+  export default {
+    components: {Counter}
+  }
+</script>

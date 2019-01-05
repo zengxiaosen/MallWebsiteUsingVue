@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vuex</title>
+  <script src="../../node_modules/vue/dist/vue.js"></script>
+  <script src="../../node_modules/vuex/dist/vuex.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>{{msg}}</h2>
+  <!--如果没有vuex，我们需要在counter里面bind 它的值先给一个变量叫count-->
+  <counter v-bind:count="count"></counter>
+</div>
+
+
+
+<script>
+  const counter = {
+    template:`
+      <div>{{count}}</div>
+    `,
+    //这里用来接收组件传参的方式接收属性值
+    //需要接收一个count，上面才能打印一个count
+    //这种是我们父子组件通信的方式实现的
+    //如果我们这些组件嵌套了n层，而且还被其他组件所引用，就基本做不了
+    props:['count']
+  }
+  //vuex能把count单独抽出来，其他地方就不需要再传参了，
+  const store = new Vuex.Store({
+    //在vuex里面定义一个状态，这个状态在任何一个页面，任何一个组件都可以使用，前提是把vuex插件store在new vue中注册进来，只要注册进来，
+    //所有的页面和组件都可以用到
+    state:{
+      count:10
+    }
+  })
+  new Vue({
+    //监听app
+    el:"#app",
+    //key和value一样的时候，可以省略value，它的意思其实就是store ：store
+    //store,
+    data:{
+      count:15,
+      msg:"Vuex的使用"
+    },
+    components:{
+      //注册进去以后，它就具备了vuex的功能
+      counter
+    }
+  })
+</script>
+</body>
+</html>
+<script>
+  import Counter from "../../src/components/Counter";
+  export default {
+    components: {Counter}
+  }
+</script>

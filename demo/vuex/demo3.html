@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vuex</title>
+  <script src="../../node_modules/vue/dist/vue.js"></script>
+  <script src="../../node_modules/vuex/dist/vuex.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <h2>{{msg}}</h2>
+  <!--加一个按钮触发incr -->
+  <a href="javascript:;" @click="add">点击</a>
+  <counter></counter>
+</div>
+
+
+
+<script>
+  const counter = {
+    //组件里面的模版必须有一个根元素，不能两个div并行
+    template:`
+      <div>
+        <div>点击数量:{{count}}</div>
+        <div>用户名:{{name}}</div>
+      </div>
+    `,
+    computed:{
+      count(){
+        return this.$store.state.count
+      },
+      //上面的模版定义了一个name，这里的computed也必须定义一个count()
+      name(){
+        return this.$store.state.name
+      }
+    }
+  }
+  const store = new Vuex.Store({
+    //在vuex里面定义一个状态，这个状态在任何一个页面，任何一个组件都可以使用，前提是把vuex插件store在new vue中注册进来，只要注册进来，
+    //所有的页面和组件都可以用到
+    state:{
+      //
+      count:10,
+      //
+      name:'jack'
+    },
+    //改变状态唯一的途径
+    mutations:{
+      //这实际上是我们注册的一个事件类型
+      //这个state就是我们当前vue实例的state，它就可以拿到我们的状态值，拿到状态值之后，就可以改变count
+      increment(state,num){
+        state.count = num
+      },
+      updateName(state, userName){
+        state.name = userName
+      }
+    }
+  })
+  new Vue({
+    //监听app
+    el:"#app",
+    //key和value一样的时候，可以省略value，它的意思其实就是store ：store
+    store,
+    data:{
+      msg:"Vuex的使用"
+    },
+    components:{
+      //注册进去以后，它就具备了vuex的功能
+      counter
+    },
+    methods:{
+      add(){
+        //通过commit触发mutations，然后state就可以改变了
+        //通过$store拿到vuex对象，然后通过commit方法进行提交
+        //commit的参数就可以传我们的事件类型
+        this.$store.commit("increment", 100)
+        this.$store.commit("updateName", 'MaYun')
+      }
+    }
+  })
+</script>
+</body>
+</html>
+<script>
+  import Counter from "../../src/components/Counter";
+  export default {
+    components: {Counter}
+  }
+</script>
